@@ -7,7 +7,7 @@ export const Logo = ({ variant = "dark", size = 28 }) => {
   return (
     <div className="flex items-center gap-2.5" data-testid="brand-logo">
       <img
-        src="/assets/images/gastyconvoy-logo.svg"
+        src="/assets/images/gastyconvoy.jpeg"
         alt="GastyConvoy - Un convoyeur qu'on voit"
         style={{ height, width: "auto" }}
         className="block rounded bg-white"
