@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="GastyConvoy">
+  <rect width="64" height="64" rx="14" fill="#0F2A5F"/>
+  <path d="M11 39c4-12 14-19 28-19 7 0 13 2 18 7l4 4c1 1 0 3-1 3H48l-4 10H25l-4-10h-8c-2 0-3-2-2-4Z" fill="#ffffff" opacity="0.96"/>
+  <path d="M24 30c8-5 17-5 26-1l-7 4H24v-3Z" fill="#2DA84F"/>
+  <circle cx="25" cy="44" r="6" fill="#2DA84F" stroke="#0F2A5F" stroke-width="2"/>
+  <circle cx="45" cy="44" r="6" fill="#2DA84F" stroke="#0F2A5F" stroke-width="2"/>
+  <text x="32" y="18" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="800" fill="#ffffff">GC</text>
+</svg>
