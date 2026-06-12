@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import {
   Lock, LogOut, Mail, Phone, MapPin, Calendar, User, Car,
@@ -95,9 +95,9 @@ const AdminDashboard = ({ password, onLogout }) => {
   const [stats, setStats] = useState({ contacts_total: 0, contacts_new: 0, quotes_total: 0, quotes_new: 0 });
   const [loading, setLoading] = useState(true);
 
-  const headers = { "x-admin-password": password };
+  const headers = useMemo(() => ({ "x-admin-password": password }), [password]);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const [q, c, s] = await Promise.all([
@@ -113,9 +113,9 @@ const AdminDashboard = ({ password, onLogout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [headers]);
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, []);
+  useEffect(() => { load(); }, [load]);
 
   const markStatus = async (kind, id, status) => {
     await axios.patch(`${API}/admin/${kind}/${id}`, { status }, { headers });
