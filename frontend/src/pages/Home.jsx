@@ -21,7 +21,7 @@ import {
   PackageCheck,
   Quote as QuoteIcon,
 } from "lucide-react";
-import { trackVisitorEvent } from "../lib/supabaseRest";
+import { createMission, getMyProfile, trackVisitorEvent } from "../lib/supabaseRest";
 
 const WHATSAPP_PHONE = "33760610880";
 
@@ -617,7 +617,7 @@ const QuoteForm = () => {
 
   const update = (k, v) => setData((d) => ({ ...d, [k]: v }));
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
@@ -629,24 +629,46 @@ const QuoteForm = () => {
       `Service: ${data.service_type}`,
       `Nom: ${data.name}`,
       `Email: ${data.email}`,
-      `Téléphone: ${data.phone}`,
-      optionalLine("Date souhaitée", data.pickup_date),
+      `Telephone: ${data.phone}`,
+      optionalLine("Date souhaitee", data.pickup_date),
       `Prise en charge: ${data.pickup_address}`,
       `Livraison: ${data.delivery_address}`,
-      optionalLine("Véhicule", [data.vehicle_brand, data.vehicle_model, data.vehicle_year].filter(Boolean).join(" ")),
-      optionalLine("Énergie", data.vehicle_fuel),
-      optionalLine("Précisions", data.notes),
+      optionalLine("Vehicule", [data.vehicle_brand, data.vehicle_model, data.vehicle_year].filter(Boolean).join(" ")),
+      optionalLine("Energie", data.vehicle_fuel),
+      optionalLine("Precisions", data.notes),
     ].filter(Boolean).join("\n");
 
-    trackEvent("quote_whatsapp_opened", {
-      client_type: data.client_type,
-      service_type: data.service_type,
-      has_vehicle: Boolean(data.vehicle_brand || data.vehicle_model),
-    });
-    openWhatsApp(message);
-    setSuccess(true);
-    setData(initial);
-    setSubmitting(false);
+    try {
+      const profile = await getMyProfile();
+      if (profile?.role === "client") {
+        await createMission({
+          client_id: profile.id,
+          client_name: data.name || profile.full_name,
+          client_email: data.email || profile.email,
+          client_phone: data.phone || profile.phone,
+          service_type: data.service_type,
+          status: "request_received",
+          vehicle: [data.vehicle_brand, data.vehicle_model, data.vehicle_year].filter(Boolean).join(" "),
+          pickup_address: data.pickup_address,
+          delivery_address: data.delivery_address,
+          scheduled_date: data.pickup_date || null,
+          notes: [data.client_type, data.vehicle_fuel, data.notes].filter(Boolean).join(" - "),
+        });
+        trackEvent("quote_request_created", { client_type: data.client_type, service_type: data.service_type });
+      } else {
+        trackEvent("quote_whatsapp_opened", { client_type: data.client_type, service_type: data.service_type, has_vehicle: Boolean(data.vehicle_brand || data.vehicle_model) });
+        openWhatsApp(message);
+      }
+      setSuccess(true);
+      setData(initial);
+    } catch (err) {
+      trackEvent("quote_whatsapp_opened", { client_type: data.client_type, service_type: data.service_type, has_vehicle: Boolean(data.vehicle_brand || data.vehicle_model) });
+      openWhatsApp(message);
+      setSuccess(true);
+      setData(initial);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -799,10 +821,10 @@ const QuoteForm = () => {
 
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
                   <p className="text-xs text-[#4F5B7A] max-w-md">
-                    Ce formulaire ouvre WhatsApp avec votre demande préremplie. Aucune donnée n’est enregistrée sur le site pour le moment.
+                    Si vous etes connecte comme client, la demande est enregistree dans votre espace. Sinon WhatsApp ouvre la demande pre-remplie.
                   </p>
                   <button type="submit" disabled={submitting} className="btn-primary" data-testid="quote-submit">
-                    {submitting ? "Ouverture…" : "Envoyer sur WhatsApp"}
+                    {submitting ? "Ouverture…" : "Envoyer la demande"}
                     {!submitting && <ArrowRight size={18} />}
                   </button>
                 </div>
@@ -825,7 +847,7 @@ const ContactSection = () => {
 
   const update = (k, v) => setData((d) => ({ ...d, [k]: v }));
 
-  const submit = (e) => {
+    const submit = (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
@@ -835,7 +857,7 @@ const ContactSection = () => {
       "",
       `Nom: ${data.name}`,
       `Email: ${data.email}`,
-      optionalLine("Téléphone", data.phone),
+      optionalLine("Telephone", data.phone),
       optionalLine("Sujet", data.subject),
       `Message: ${data.message}`,
     ].filter(Boolean).join("\n");
@@ -849,7 +871,6 @@ const ContactSection = () => {
     setData(initial);
     setSubmitting(false);
   };
-
   return (
     <section id="contact" className="relative py-24 lg:py-32" data-testid="section-contact">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 items-start">
@@ -944,7 +965,7 @@ const ContactSection = () => {
                 {error && <div className="mt-4 px-4 py-3 rounded-xl bg-red-50 text-red-700 text-sm" data-testid="contact-error">{error}</div>}
 
                 <button type="submit" disabled={submitting} className="btn-primary mt-6" data-testid="contact-submit">
-                  {submitting ? "Ouverture…" : "Envoyer sur WhatsApp"}
+                  {submitting ? "Ouverture…" : "Envoyer la demande"}
                   {!submitting && <ArrowRight size={18} />}
                 </button>
               </>
