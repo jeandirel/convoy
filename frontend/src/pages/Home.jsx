@@ -46,7 +46,7 @@ const Hero = () => (
   <section id="hero" className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28" data-testid="section-hero">
     <div className="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1920&q=80"
+        src="/assets/images/hero-car.jpg"
         alt=""
         className="w-full h-full object-cover"
       />
@@ -99,7 +99,7 @@ const Hero = () => (
             <div className="absolute -inset-4 bg-gradient-to-br from-[#2DA84F]/40 to-[#E9C97C]/20 blur-2xl rounded-[40px]" />
             <div className="relative rounded-[32px] overflow-hidden border-2 border-white/15 shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80"
+                src="/assets/images/convoyage-car.jpg"
                 alt="Convoyage voiture"
                 className="w-full h-[480px] object-cover"
               />
@@ -354,7 +354,7 @@ const About = () => (
       <div className="lg:col-span-5 reveal">
         <div className="relative">
           <img
-            src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=900&q=80"
+            src="/assets/images/road.jpg"
             alt="Route et autoroute"
             className="rounded-[28px] shadow-2xl border-2 border-white/10 w-full h-[520px] object-cover"
           />
