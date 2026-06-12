@@ -56,7 +56,10 @@ export const Footer = () => {
 
         <div className="mt-14 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between gap-3 text-sm text-white/50">
           <p>© {year} GastyConvoy. Tous droits réservés.</p>
-          <p className="font-display italic">Flexibilité · Sécurité · Suivi</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <a href="/admin" className="hover:text-white transition-colors" data-testid="footer-admin-link">Espace pro</a>
+            <p className="font-display italic">Flexibilité · Sécurité · Suivi</p>
+          </div>
         </div>
       </div>
     </footer>
