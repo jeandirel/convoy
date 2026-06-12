@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   ArrowRight,
   ShieldCheck,
@@ -12,6 +11,7 @@ import {
   MapPin,
   Phone,
   Mail,
+  MessageCircle,
   Clock,
   Plus,
   Minus,
@@ -22,8 +22,14 @@ import {
   Quote as QuoteIcon,
 } from "lucide-react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const WHATSAPP_PHONE = "33760610880";
+
+const openWhatsApp = (message) => {
+  const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+};
+
+const optionalLine = (label, value) => value ? `${label}: ${value}` : null;
 
 /* ---------- Reveal on scroll ---------- */
 const useReveal = () => {
@@ -603,19 +609,31 @@ const QuoteForm = () => {
 
   const update = (k, v) => setData((d) => ({ ...d, [k]: v }));
 
-  const submit = async (e) => {
+  const submit = (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
-    try {
-      await axios.post(`${API}/quote`, data);
-      setSuccess(true);
-      setData(initial);
-    } catch (err) {
-      setError(err.response?.data?.detail || "Une erreur est survenue. Réessayez ou appelez-nous.");
-    } finally {
-      setSubmitting(false);
-    }
+
+    const message = [
+      "Bonjour GastyConvoy, je souhaite recevoir un devis.",
+      "",
+      `Profil: ${data.client_type}`,
+      `Service: ${data.service_type}`,
+      `Nom: ${data.name}`,
+      `Email: ${data.email}`,
+      `Téléphone: ${data.phone}`,
+      optionalLine("Date souhaitée", data.pickup_date),
+      `Prise en charge: ${data.pickup_address}`,
+      `Livraison: ${data.delivery_address}`,
+      optionalLine("Véhicule", [data.vehicle_brand, data.vehicle_model, data.vehicle_year].filter(Boolean).join(" ")),
+      optionalLine("Énergie", data.vehicle_fuel),
+      optionalLine("Précisions", data.notes),
+    ].filter(Boolean).join("\n");
+
+    openWhatsApp(message);
+    setSuccess(true);
+    setData(initial);
+    setSubmitting(false);
   };
 
   return (
@@ -665,9 +683,9 @@ const QuoteForm = () => {
                 <div className="w-20 h-20 rounded-full bg-[#2DA84F]/15 mx-auto flex items-center justify-center">
                   <CheckCircle2 size={36} className="text-[#2DA84F]" />
                 </div>
-                <h3 className="font-display text-3xl mt-6">Demande envoyée !</h3>
+                <h3 className="font-display text-3xl mt-6">Demande prête sur WhatsApp</h3>
                 <p className="text-[#4F5B7A] mt-3">
-                  Merci pour votre confiance. Je vous recontacte sous 24h ouvrées avec votre devis.
+                  WhatsApp vient de s’ouvrir avec votre demande préremplie. Envoyez le message pour finaliser votre demande.
                 </p>
                 <button
                   type="button"
@@ -768,11 +786,10 @@ const QuoteForm = () => {
 
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
                   <p className="text-xs text-[#4F5B7A] max-w-md">
-                    En envoyant ce formulaire, vous acceptez d'être contacté par GastyConvoy
-                    concernant votre demande.
+                    Ce formulaire ouvre WhatsApp avec votre demande préremplie. Aucune donnée n’est enregistrée sur le site pour le moment.
                   </p>
                   <button type="submit" disabled={submitting} className="btn-primary" data-testid="quote-submit">
-                    {submitting ? "Envoi…" : "Envoyer ma demande"}
+                    {submitting ? "Ouverture…" : "Envoyer sur WhatsApp"}
                     {!submitting && <ArrowRight size={18} />}
                   </button>
                 </div>
@@ -795,19 +812,25 @@ const ContactSection = () => {
 
   const update = (k, v) => setData((d) => ({ ...d, [k]: v }));
 
-  const submit = async (e) => {
+  const submit = (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError("");
-    try {
-      await axios.post(`${API}/contact`, data);
-      setSuccess(true);
-      setData(initial);
-    } catch (err) {
-      setError(err.response?.data?.detail || "Une erreur est survenue.");
-    } finally {
-      setSubmitting(false);
-    }
+
+    const message = [
+      "Bonjour GastyConvoy, je vous contacte depuis le site.",
+      "",
+      `Nom: ${data.name}`,
+      `Email: ${data.email}`,
+      optionalLine("Téléphone", data.phone),
+      optionalLine("Sujet", data.subject),
+      `Message: ${data.message}`,
+    ].filter(Boolean).join("\n");
+
+    openWhatsApp(message);
+    setSuccess(true);
+    setData(initial);
+    setSubmitting(false);
   };
 
   return (
@@ -863,8 +886,8 @@ const ContactSection = () => {
                 <div className="w-20 h-20 rounded-full bg-[#2DA84F]/15 mx-auto flex items-center justify-center">
                   <CheckCircle2 size={36} className="text-[#2DA84F]" />
                 </div>
-                <h3 className="font-display text-3xl mt-6 text-[#0F2A5F]">Message reçu !</h3>
-                <p className="text-[#4F5B7A] mt-3">Merci. Je vous réponds très vite.</p>
+                <h3 className="font-display text-3xl mt-6 text-[#0F2A5F]">Message prêt sur WhatsApp</h3>
+                <p className="text-[#4F5B7A] mt-3">WhatsApp vient de s’ouvrir avec votre message prérempli. Envoyez-le pour lancer la discussion.</p>
                 <button type="button" onClick={() => setSuccess(false)} className="mt-6 btn-outline" data-testid="contact-success-reset">
                   Envoyer un autre message
                 </button>
@@ -872,7 +895,7 @@ const ContactSection = () => {
             ) : (
               <>
                 <h3 className="font-display text-2xl text-[#0F2A5F]">Envoyez-moi un message</h3>
-                <p className="text-[#4F5B7A] text-sm mt-1">Je reviens vers vous personnellement.</p>
+                <p className="text-[#4F5B7A] text-sm mt-1">Le formulaire ouvre WhatsApp avec votre message prérempli.</p>
 
                 <div className="grid sm:grid-cols-2 gap-4 mt-6">
                   <div>
@@ -904,7 +927,7 @@ const ContactSection = () => {
                 {error && <div className="mt-4 px-4 py-3 rounded-xl bg-red-50 text-red-700 text-sm" data-testid="contact-error">{error}</div>}
 
                 <button type="submit" disabled={submitting} className="btn-primary mt-6" data-testid="contact-submit">
-                  {submitting ? "Envoi…" : "Envoyer le message"}
+                  {submitting ? "Ouverture…" : "Envoyer sur WhatsApp"}
                   {!submitting && <ArrowRight size={18} />}
                 </button>
               </>
@@ -915,6 +938,20 @@ const ContactSection = () => {
     </section>
   );
 };
+
+
+const WhatsAppFloatingButton = () => (
+  <a
+    href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent("Bonjour GastyConvoy, je souhaite discuter de mon besoin de convoyage.")}`}
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Discuter sur WhatsApp"
+    data-testid="whatsapp-floating-button"
+    className="fixed bottom-5 right-5 z-50 w-16 h-16 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_20px_45px_-15px_rgba(37,211,102,0.75)] ring-[18px] ring-[#25D366]/10 hover:scale-105 hover:bg-[#1FBE5D] transition-transform"
+  >
+    <MessageCircle size={31} strokeWidth={2.4} />
+  </a>
+);
 
 /* ---------- PAGE ---------- */
 const Home = () => {
@@ -931,6 +968,7 @@ const Home = () => {
       <FAQ />
       <QuoteForm />
       <ContactSection />
+      <WhatsAppFloatingButton />
     </div>
   );
 };
