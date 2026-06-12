@@ -31,6 +31,12 @@ const openWhatsApp = (message) => {
 
 const optionalLine = (label, value) => value ? `${label}: ${value}` : null;
 
+const trackEvent = (eventName, properties = {}) => {
+  if (window.posthog?.capture) {
+    window.posthog.capture(eventName, properties);
+  }
+};
+
 /* ---------- Reveal on scroll ---------- */
 const useReveal = () => {
   useEffect(() => {
@@ -630,6 +636,11 @@ const QuoteForm = () => {
       optionalLine("Précisions", data.notes),
     ].filter(Boolean).join("\n");
 
+    trackEvent("quote_whatsapp_opened", {
+      client_type: data.client_type,
+      service_type: data.service_type,
+      has_vehicle: Boolean(data.vehicle_brand || data.vehicle_model),
+    });
     openWhatsApp(message);
     setSuccess(true);
     setData(initial);
@@ -827,6 +838,10 @@ const ContactSection = () => {
       `Message: ${data.message}`,
     ].filter(Boolean).join("\n");
 
+    trackEvent("contact_whatsapp_opened", {
+      has_phone: Boolean(data.phone),
+      has_subject: Boolean(data.subject),
+    });
     openWhatsApp(message);
     setSuccess(true);
     setData(initial);
@@ -947,6 +962,7 @@ const WhatsAppFloatingButton = () => (
     rel="noreferrer"
     aria-label="Discuter sur WhatsApp"
     data-testid="whatsapp-floating-button"
+    onClick={() => trackEvent("floating_whatsapp_clicked")}
     className="fixed bottom-5 right-5 z-50 w-16 h-16 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_20px_45px_-15px_rgba(37,211,102,0.75)] ring-[18px] ring-[#25D366]/10 hover:scale-105 hover:bg-[#1FBE5D] transition-transform"
   >
     <MessageCircle size={31} strokeWidth={2.4} />
