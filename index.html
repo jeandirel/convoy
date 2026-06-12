@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GastyConvoy - Convoyage automobile de confiance</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #222; background: #f9f9f9; }
+    header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 60px 20px; text-align: center; }
+    header h1 { font-size: 3em; letter-spacing: 2px; margin-bottom: 10px; }
+    header h1 span { color: #e94560; }
+    header p { font-size: 1.2em; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+    nav { background: #e94560; display: flex; justify-content: center; gap: 30px; padding: 15px; position: sticky; top: 0; z-index: 100; }
+    nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1em; }
+    section { padding: 60px 20px; max-width: 900px; margin: 0 auto; }
+    .about { text-align: center; }
+    .about h2 { font-size: 2em; color: #0f3460; margin-bottom: 20px; }
+    .about p { font-size: 1.1em; line-height: 1.8; color: #444; }
+    .services { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin: 40px auto; max-width: 900px; }
+    .services h2 { font-size: 2em; color: #0f3460; text-align: center; margin-bottom: 30px; }
+    .cards { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .card { background: #f0f4ff; border-left: 4px solid #e94560; border-radius: 8px; padding: 25px; flex: 1 1 200px; max-width: 250px; }
+    .card h3 { color: #0f3460; margin-bottom: 10px; }
+    .card p { color: #555; font-size: 0.95em; line-height: 1.6; }
+    .why { text-align: center; }
+    .why h2 { font-size: 2em; color: #0f3460; margin-bottom: 30px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+    .badge { background: #e94560; color: white; border-radius: 50px; padding: 10px 25px; font-weight: 600; }
+    .contact-section { background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; text-align: center; padding: 60px 20px; }
+    .contact-section h2 { font-size: 2em; margin-bottom: 15px; }
+    .contact-section p { font-size: 1.1em; opacity: 0.85; margin-bottom: 30px; }
+    .contact-section a.btn { display: inline-block; background: #e94560; color: white; padding: 14px 35px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1em; }
+    footer { background: #111; color: #aaa; text-align: center; padding: 20px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gasty<span>Convoy</span></h1>
+    <p>Un convoyeur qu'on voit. Le convoyage automobile en toute confiance.</p>
+  </header>
+  <nav>
+    <a href="#about">A propos</a>
+    <a href="#services">Services</a>
+    <a href="#pourquoi">Pourquoi moi</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <section class="about" id="about">
+    <h2>Qui suis-je ?</h2>
+    <p>Je m'appelle <strong>Minko Mambi Franck</strong>, fondateur de GastyConvoy, base a Maromme (76). J'ai cree cette micro-entreprise avec une conviction simple : confier sa voiture a quelqu'un, ca ne se prend pas a la legere. Chaque convoyage que j'effectue, je le traite comme si la voiture etait la mienne.</p>
+  </section>
+  <div class="services" id="services">
+    <h2>Mes Services</h2>
+    <div class="cards">
+      <div class="card"><h3>Convoyage entre particuliers</h3><p>Transfert de votre vehicule d'un point A a un point B en toute securite.</p></div>
+      <div class="card"><h3>Convoyage professionnel</h3><p>Pour les concessions, garages et entreprises de location de vehicules.</p></div>
+      <div class="card"><h3>Livraison de vehicule</h3><p>Livraison apres achat ou vente entre particuliers ou professionnels.</p></div>
+      <div class="card"><h3>Assistance et Depannage</h3><p>Convoyage apres panne, controle technique ou tout besoin ponctuel.</p></div>
+    </div>
+  </div>
+  <section class="why" id="pourquoi">
+    <h2>Pourquoi choisir GastyConvoy ?</h2>
+    <div class="badges">
+      <span class="badge">Serieux et Ponctuel</span>
+      <span class="badge">Assure et Responsable</span>
+      <span class="badge">Soigneux avec les vehicules</span>
+      <span class="badge">Tarifs transparents</span>
+      <span class="badge">Disponible 7j/7</span>
+      <span class="badge">Base en Seine-Maritime (76)</span>
+    </div>
+  </section>
+  <div class="contact-section" id="contact">
+    <h2>Besoin d'un convoyeur de confiance ?</h2>
+    <p>Contactez-moi pour un devis rapide et personnalise.</p>
+    <a href="mailto:contact@gastyconvoy.fr" class="btn">Me contacter</a>
+  </div>
+  <footer>
+    <p>2026 GastyConvoy - Minko Mambi Franck - Maromme (76) - Tous droits reserves</p>
+  </footer>
+</body>
+</html>
