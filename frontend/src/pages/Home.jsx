@@ -21,6 +21,7 @@ import {
   PackageCheck,
   Quote as QuoteIcon,
 } from "lucide-react";
+import { trackVisitorEvent } from "../lib/supabaseRest";
 
 const WHATSAPP_PHONE = "33760610880";
 
@@ -35,6 +36,7 @@ const trackEvent = (eventName, properties = {}) => {
   if (window.posthog?.capture) {
     window.posthog.capture(eventName, properties);
   }
+  trackVisitorEvent(eventName, properties);
 };
 
 /* ---------- Reveal on scroll ---------- */
@@ -972,6 +974,10 @@ const WhatsAppFloatingButton = () => (
 /* ---------- PAGE ---------- */
 const Home = () => {
   useReveal();
+  useEffect(() => {
+    trackEvent("page_view", { title: document.title });
+  }, []);
+
   return (
     <div data-testid="home-page">
       <Hero />
